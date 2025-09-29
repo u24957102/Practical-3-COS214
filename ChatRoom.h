@@ -22,8 +22,8 @@ public:
     virtual void sendMessage(string message, Users* fromUser) = 0;
     virtual void saveMessage(string message, Users* fromUser) = 0;
     
-    vector<Users*>& getUsers() { return users; }
-    vector<string>& getChatHistory() { return chatHistory; }
+    vector<Users*>& getUsers();
+    vector<string>& getChatHistory(); 
 };
 
 #endif

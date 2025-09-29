@@ -26,7 +26,7 @@ public:
     void addCommand(Command* command);
     void executeAll();
     
-    string getName() const { return name; }
+    string getName() const;
 };
 
 #endif
