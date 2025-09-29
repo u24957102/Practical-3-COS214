@@ -3,8 +3,10 @@
 
 #include "Users.h"
 
-class Name3 : public Users{
-    
+class Name3 : public Users
+{
+public:
+    Name3(string userName) : Users(userName) {}
 };
 
 #endif

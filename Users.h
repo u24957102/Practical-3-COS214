@@ -2,24 +2,31 @@
 #define USERS_H
 
 #include <string>
-
-#include "ChatRoom.h"
-#include "Command.h"
+#include <vector>
 
 using namespace std;
+
+class ChatRoom;
+class Command;
 
 class Users
 {
 protected:
-    ChatRoom *chatRooms;
+    vector<ChatRoom*> chatRooms;
     string name;
-    Command *commandQueue;
+    vector<Command*> commandQueue;
 
 public:
-    void send(string message, ChatRoom room);
-    void receive(string message, Users fromUser, ChatRoom room);
-    void addCommand(Command command);
+    Users(string userName) : name(userName) {}
+    
+    virtual ~Users() {} 
+    
+    void send(string message, ChatRoom* room);
+    void receive(string message, Users* fromUser, ChatRoom* room);
+    void addCommand(Command* command);
     void executeAll();
+    
+    string getName() const { return name; }
 };
 
 #endif

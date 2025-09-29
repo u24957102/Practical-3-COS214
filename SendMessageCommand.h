@@ -2,10 +2,16 @@
 #define SENDMESSAGECOMMAND_H
 
 #include "Command.h"
+#include "ChatRoom.h"
+#include "Users.h"
 
-class SendMessageCommand : public Command{
+class SendMessageCommand : public Command
+{
 public:
-    void execute();
+    SendMessageCommand(ChatRoom* chatRoom, string msg, Users* user)
+        : Command(chatRoom, msg, user) {}
+    
+    void execute() override;
 };
 
 #endif

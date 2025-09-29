@@ -2,10 +2,16 @@
 #define LOGMESSAGECOMMAND_H
 
 #include "Command.h"
+#include "ChatRoom.h"
+#include "Users.h"
 
-class LogMessageCommand : public Command{
+class LogMessageCommand : public Command
+{
 public:
-    void execute();
+    LogMessageCommand(ChatRoom* chatRoom, string msg, Users* user)
+        : Command(chatRoom, msg, user) {}
+    
+    void execute() override;
 };
 
 #endif

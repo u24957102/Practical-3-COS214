@@ -3,19 +3,24 @@
 
 #include <string>
 
-#include "ChatRoom.h"
-#include "Users.h"
-
 using namespace std;
+
+class ChatRoom;
+class Users;
 
 class Command
 {
 protected:
-    ChatRoom room;
+    ChatRoom* room;
     string message;
-    Users fromUser;
+    Users* fromUser;
 
 public:
+    virtual ~Command() {} 
+    
+    Command(ChatRoom* chatRoom, string msg, Users* user)
+        : room(chatRoom), message(msg), fromUser(user) {}
+    
     virtual void execute() = 0;
 };
 

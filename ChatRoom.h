@@ -2,22 +2,28 @@
 #define CHATROOM_H
 
 #include <string>
-
+#include <vector>
 #include "Users.h"
 
 using namespace std;
 
 class ChatRoom
 {
-private:
-    Users *users;
-    string *chatHistory;
+protected:
+    vector<Users*> users;
+    vector<string> chatHistory;
 
 public:
-    virtual void registerUser(Users user);
-    virtual void sendMessage(string message, Users fromUser);
-    virtual void saveMessage(string message, Users fromUser);
-    virtual void removeUser(Users user);
+    virtual ~ChatRoom() {} 
+    
+    virtual void registerUser(Users* user) = 0;
+    virtual void removeUser(Users* user) = 0;
+    
+    virtual void sendMessage(string message, Users* fromUser) = 0;
+    virtual void saveMessage(string message, Users* fromUser) = 0;
+    
+    vector<Users*>& getUsers() { return users; }
+    vector<string>& getChatHistory() { return chatHistory; }
 };
 
 #endif

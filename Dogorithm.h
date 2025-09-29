@@ -3,12 +3,13 @@
 
 #include "ChatRoom.h"
 
-class Dogorithm : public ChatRoom{
+class Dogorithm : public ChatRoom
+{
 public:
-    void registerUser(Users user);
-    void sendMessage(string message, Users fromUser);
-    void saveMessage (string message, Users fromUser);
-    void removeUser(Users user);
+    void registerUser(Users* user) override;
+    void removeUser(Users* user) override;
+    void sendMessage(string message, Users* fromUser) override;
+    void saveMessage(string message, Users* fromUser) override;
 };
 
 #endif
