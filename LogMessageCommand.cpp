@@ -1,3 +1,4 @@
+//LogMessageCommand.cpp
 #include "LogMessageCommand.h"
 #include "ChatRoom.h"
 #include "Users.h"

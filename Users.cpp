@@ -1,9 +1,17 @@
+/**
+ * @file Users.cpp
+ * @brief Implementation of Users class with Observer pattern
+ * @author Paul hofmeyr & Mutombo Kabau
+ */
+
 #include "Users.h"
 #include "ChatRoom.h"
 #include "Command.h"
 #include "SendMessageCommand.h"
 #include "LogMessageCommand.h"
 #include <iostream>
+
+using namespace std;
 
 void Users::send(string message, ChatRoom *room)
 {
@@ -48,4 +56,32 @@ void Users::executeAll()
 string Users::getName() const
 {
     return name;
+}
+
+void Users::update(const string& message, const string& roomName)
+{
+    // Receive notification from subscribed chat room (Observer pattern)
+    string notification = "[NOTIFICATION from " + roomName + "]: " + message;
+    notifications.push_back(notification);
+    cout << "[" << name << " - Notification]: " << message << " (from " << roomName << ")" << endl;
+}
+
+vector<string> Users::getNotifications() const
+{
+    return notifications;
+}
+
+void Users::clearNotifications()
+{
+    notifications.clear();
+}
+
+void Users::addChatRoom(ChatRoom* room)
+{
+    chatRooms.push_back(room);
+}
+
+vector<ChatRoom*> Users::getChatRooms() const
+{
+    return chatRooms;
 }

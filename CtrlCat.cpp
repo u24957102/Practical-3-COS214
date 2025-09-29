@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 
+using namespace std;
+
 void CtrlCat::registerUser(Users *user)
 {
     // Check if user is already registered
@@ -9,7 +11,11 @@ void CtrlCat::registerUser(Users *user)
     if (it == users.end())
     {
         users.push_back(user);
+        user->addChatRoom(this); // Add this room to user's list
         cout << "[CtrlCat]: " << user->getName() << " has joined the room!" << endl;
+        
+        // Notify all subscribers that a new user joined (Observer pattern)
+        notify(user->getName() + " has joined CtrlCat!", roomName);
     }
 }
 
@@ -21,6 +27,9 @@ void CtrlCat::removeUser(Users *user)
     {
         cout << "[CtrlCat]: " << user->getName() << " has left the room." << endl;
         users.erase(it);
+        
+        // Notify all subscribers that user left (Observer pattern)
+        notify(user->getName() + " has left CtrlCat!", roomName);
     }
 }
 

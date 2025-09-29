@@ -1,3 +1,4 @@
+//LogMessageCommand.h
 #ifndef LOGMESSAGECOMMAND_H
 #define LOGMESSAGECOMMAND_H
 

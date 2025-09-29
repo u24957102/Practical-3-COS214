@@ -1,3 +1,4 @@
+//SendMessageCommand.h
 #ifndef SENDMESSAGECOMMAND_H
 #define SENDMESSAGECOMMAND_H
 
