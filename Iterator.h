@@ -2,7 +2,6 @@
  * @file Iterator.h
  * @brief Iterator pattern implementation for traversing chat history and user lists
  * @author Mutombo Kabau
- * @date 29-09-2025
  */
 
 #ifndef ITERATOR_H

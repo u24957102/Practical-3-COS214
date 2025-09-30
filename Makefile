@@ -3,10 +3,10 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -g
 COVERAGE_FLAGS = --coverage -fprofile-arcs -ftest-arcs
 
-# Source files
-SOURCES = Users.cpp ChatRoom.cpp CtrlCat.cpp Dogorithm.cpp \
+# Source files (ChatRoom.cpp removed - methods are inline in ChatRoom.h)
+SOURCES = Users.cpp CtrlCat.cpp Dogorithm.cpp \
           SendMessageCommand.cpp LogMessageCommand.cpp \
-          Name1.cpp Name2.cpp Name3.cpp Command.cpp
+          Command.cpp
 
 # Main files
 TESTING_MAIN = TestingMain.cpp

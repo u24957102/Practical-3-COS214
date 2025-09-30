@@ -1,7 +1,7 @@
 /**
  * @file ChatRoom.h
  * @brief ChatRoom class with Mediator, Observer, and Iterator patterns
- * @author paul hofmeyr  & Mutombo Kabau
+ * @author paul hofmeyr & Mutombo Kabau
  */
 
 #ifndef CHATROOM_H
@@ -22,7 +22,7 @@ using namespace std;
  * This class participates in multiple patterns:
  * - Mediator: Manages communication between users (Mediator)
  * - Subject: Notifies subscribed users of events (Observer pattern)
- * - Aggregate: Provides iterators for users and chat history (Iterator pattern)
+ * - Provides iterators for users and chat history (Iterator pattern)
  */
 class ChatRoom : public Subject
 {
@@ -36,12 +36,8 @@ public:
      * @brief Constructor
      * @param name The name of the chat room
      */
-    ChatRoom(const string& name) : roomName(name) {}
-    
-    /**
-     * @brief Virtual destructor
-     */
-    virtual ~ChatRoom() {} 
+    ChatRoom(const std::string& name) : roomName(name) {}
+    virtual ~ChatRoom() {}
     
     /**
      * @brief Register a user to the chat room

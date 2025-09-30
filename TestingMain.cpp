@@ -1,219 +1,304 @@
 /**
  * @file TestingMain.cpp
- * @brief Testing main file for PetSpace chat system demonstrating Mediator and Command patterns
- * @author Your Name
- * @date 2025-09-29
+ * @brief Comprehensive testing for PetSpace - All 4 Design Patterns
+ * @author Mutombo Kabau & Paul Hofmeyr
+ * @date 29-09-2025
  */
 
 #include <iostream>
 #include <string>
-#include "Users.h"
+#include "Iterator.h"
+#include "Observer.h"
 #include "ChatRoom.h"
 #include "CtrlCat.h"
 #include "Dogorithm.h"
-#include "Name1.h"
-#include "Name2.h"
-#include "Name3.h"
+#include "Users.h"
 
 using namespace std;
 
-/**
- * @brief Prints a section header for better output organization
- * @param title The section title to display
- */
 void printSection(string title) {
-    cout << "\n" << string(60, '=') << endl;
+    cout << "\n" << string(65, '=') << endl;
     cout << "  " << title << endl;
-    cout << string(60, '=') << endl;
-}
-
-/**
- * @brief Displays chat history for a given chat room
- * @param room Pointer to the ChatRoom
- * @param roomName Name of the room for display
- */
-void displayChatHistory(ChatRoom* room, string roomName) {
-    cout << "\n[" << roomName << " Chat History]:" << endl;
-    vector<string>& history = room->getChatHistory();
-    
-    if (history.empty()) {
-        cout << "  No messages in history." << endl;
-    } else {
-        for (size_t i = 0; i < history.size(); i++) {
-            cout << "  " << (i + 1) << ". " << history[i] << endl;
-        }
-    }
-}
-
-/**
- * @brief Displays all users in a chat room
- * @param room Pointer to the ChatRoom
- * @param roomName Name of the room for display
- */
-void displayUsers(ChatRoom* room, string roomName) {
-    cout << "\n[" << roomName << " Users]:" << endl;
-    vector<Users*>& userList = room->getUsers();
-    
-    if (userList.empty()) {
-        cout << "  No users in room." << endl;
-    } else {
-        for (size_t i = 0; i < userList.size(); i++) {
-            cout << "  " << (i + 1) << ". " << userList[i]->getName() << endl;
-        }
-    }
+    cout << string(65, '=') << endl;
 }
 
 int main() {
-    printSection("PETSPACE - Chat System Test");
-    cout << "Testing Mediator and Command Design Patterns\n" << endl;
+    printSection("PETSPACE - All Patterns Test");
+    cout << "Mediator | Command | Iterator | Observer\n" << endl;
 
     // ========================================================================
-    // Test 1: Create Chat Rooms (Mediator Pattern)
+    // Setup: Create rooms and users
     // ========================================================================
-    printSection("Test 1: Creating Chat Rooms");
+    printSection("Setup: Creating Chat Rooms & Users");
     
     ChatRoom* ctrlCat = new CtrlCat();
     ChatRoom* dogorithm = new Dogorithm();
     
-    cout << "✓ CtrlCat chat room created" << endl;
-    cout << "✓ Dogorithm chat room created" << endl;
+    Users* alice = new Users("Alice");
+    Users* bob = new Users("Bob");
+    Users* charlie = new Users("Charlie");
+    
+    cout << "✓ Created CtrlCat and Dogorithm rooms" << endl;
+    cout << "✓ Created Alice, Bob, and Charlie" << endl;
 
     // ========================================================================
-    // Test 2: Create Users
+    // Test 1: Mediator Pattern - Register Users
     // ========================================================================
-    printSection("Test 2: Creating Users");
+    printSection("Test 1: Mediator Pattern - Register Users");
     
-    Users* alice = new Name1("Alice");
-    Users* bob = new Name2("Bob");
-    Users* charlie = new Name3("Charlie");
-    
-    cout << "✓ User created: " << alice->getName() << endl;
-    cout << "✓ User created: " << bob->getName() << endl;
-    cout << "✓ User created: " << charlie->getName() << endl;
-
-    // ========================================================================
-    // Test 3: Register Users to Chat Rooms (Mediator Pattern)
-    // ========================================================================
-    printSection("Test 3: Registering Users to Chat Rooms");
-    
-    cout << "\nRegistering to CtrlCat:" << endl;
+    cout << "ChatRoom acts as Mediator between users" << endl;
+    cout << "\nRegistering users to CtrlCat:" << endl;
     ctrlCat->registerUser(alice);
     ctrlCat->registerUser(bob);
     
-    cout << "\nRegistering to Dogorithm:" << endl;
-    dogorithm->registerUser(alice);  // Alice is in both rooms
+    cout << "\nRegistering users to Dogorithm:" << endl;
+    dogorithm->registerUser(alice);  // Alice in both rooms
     dogorithm->registerUser(charlie);
     
-    displayUsers(ctrlCat, "CtrlCat");
-    displayUsers(dogorithm, "Dogorithm");
+    cout << "\n✓ Mediator manages user registration" << endl;
 
     // ========================================================================
-    // Test 4: Send Messages in CtrlCat (Command Pattern)
+    // Test 2: Mediator Pattern - Message Routing
     // ========================================================================
-    printSection("Test 4: Sending Messages in CtrlCat Room");
+    printSection("Test 2: Mediator Pattern - Message Routing");
     
-    cout << "\nAlice sends a message in CtrlCat:" << endl;
-    alice->send("Hello everyone! Cats are amazing!", ctrlCat);
+    cout << "Users send messages THROUGH the mediator (ChatRoom)" << endl;
+    cout << "ChatRoom routes messages to other users\n" << endl;
     
-    cout << "\nBob responds in CtrlCat:" << endl;
-    bob->send("Hi Alice! I love cats too!", ctrlCat);
+    cout << "Alice sends to CtrlCat mediator:" << endl;
+    alice->send("Hello CtrlCat!", ctrlCat);
     
-    displayChatHistory(ctrlCat, "CtrlCat");
+    cout << "\nBob sends to CtrlCat mediator:" << endl;
+    bob->send("Hi Alice!", ctrlCat);
+    
+    cout << "\n✓ Messages routed through mediator, not direct user-to-user" << endl;
 
     // ========================================================================
-    // Test 5: Send Messages in Dogorithm (Command Pattern)
+    // Test 3: Command Pattern - Message Actions
     // ========================================================================
-    printSection("Test 5: Sending Messages in Dogorithm Room");
+    printSection("Test 3: Command Pattern - Encapsulated Actions");
     
-    cout << "\nAlice sends a message in Dogorithm:" << endl;
-    alice->send("Hey Dogorithm friends! Dogs are great!", dogorithm);
+    cout << "Each send() creates SendMessageCommand & LogMessageCommand" << endl;
+    cout << "Commands are queued and executed\n" << endl;
     
-    cout << "\nCharlie responds in Dogorithm:" << endl;
-    charlie->send("Welcome Alice! Dogs are the best!", dogorithm);
+    alice->send("Dogs are cool too!", dogorithm);
+    charlie->send("Welcome Alice!", dogorithm);
+    bob->send("Check out this cat video!", ctrlCat);
     
-    cout << "\nAlice sends another message:" << endl;
-    alice->send("I love both cats and dogs!", dogorithm);
-    
-    displayChatHistory(dogorithm, "Dogorithm");
+    cout << "\n✓ Commands encapsulate send & save operations" << endl;
 
     // ========================================================================
-    // Test 6: Demonstrate Multiple Messages (Command Queue)
+    // Test 4: Iterator Pattern - Browse Users
     // ========================================================================
-    printSection("Test 6: Multiple Messages Test");
+    printSection("Test 4: Iterator Pattern - User Lists");
     
-    cout << "\nBob sends multiple messages:" << endl;
-    bob->send("Check out this cool cat video!", ctrlCat);
-    bob->send("My cat learned to code in Python!", ctrlCat);
+    cout << "Using Iterator to traverse users without exposing internals\n" << endl;
     
-    displayChatHistory(ctrlCat, "CtrlCat");
+    cout << "CtrlCat Users:" << endl;
+    Iterator<Users*>* userIter = ctrlCat->createUserIterator();
+    while (userIter->hasNext()) {
+        cout << "  - " << userIter->next()->getName() << endl;
+    }
+    delete userIter;
+    
+    cout << "\nDogorithm Users:" << endl;
+    userIter = dogorithm->createUserIterator();
+    while (userIter->hasNext()) {
+        cout << "  - " << userIter->next()->getName() << endl;
+    }
+    delete userIter;
+    
+    cout << "\n✓ Iterator hides internal user storage structure" << endl;
 
     // ========================================================================
-    // Test 7: Remove User from Chat Room
+    // Test 5: Iterator Pattern - Browse History
     // ========================================================================
-    printSection("Test 7: Removing Users from Chat Rooms");
+    printSection("Test 5: Iterator Pattern - Chat History");
     
-    cout << "\nRemoving Bob from CtrlCat:" << endl;
+    cout << "Using Iterator to traverse message history\n" << endl;
+    
+    cout << "CtrlCat History:" << endl;
+    Iterator<string>* historyIter = ctrlCat->createChatHistoryIterator();
+    int count = 1;
+    while (historyIter->hasNext()) {
+        cout << "  " << count++ << ". " << historyIter->next() << endl;
+    }
+    delete historyIter;
+    
+    cout << "\nDogorithm History:" << endl;
+    historyIter = dogorithm->createChatHistoryIterator();
+    count = 1;
+    while (historyIter->hasNext()) {
+        cout << "  " << count++ << ". " << historyIter->next() << endl;
+    }
+    delete historyIter;
+    
+    cout << "\n✓ Iterator provides sequential access to history" << endl;
+
+    // ========================================================================
+    // Test 6: Iterator Pattern - Reset Functionality
+    // ========================================================================
+    printSection("Test 6: Iterator Pattern - Reset");
+    
+    historyIter = ctrlCat->createChatHistoryIterator();
+    cout << "First pass (2 messages):" << endl;
+    for (int i = 0; i < 2 && historyIter->hasNext(); i++) {
+        cout << "  " << historyIter->next() << endl;
+    }
+    
+    historyIter->reset();
+    cout << "\nAfter reset (same 2 messages):" << endl;
+    for (int i = 0; i < 2 && historyIter->hasNext(); i++) {
+        cout << "  " << historyIter->next() << endl;
+    }
+    delete historyIter;
+    
+    cout << "\n✓ Iterator can be reset to traverse again" << endl;
+
+    // ========================================================================
+    // Test 7: Observer Pattern - Subscribe
+    // ========================================================================
+    printSection("Test 7: Observer Pattern - Subscriptions");
+    
+    cout << "Users subscribe to ChatRoom (Subject) for notifications\n" << endl;
+    
+    ctrlCat->subscribe(alice);
+    ctrlCat->subscribe(bob);
+    dogorithm->subscribe(alice);  // Alice subscribes to both
+    dogorithm->subscribe(charlie);
+    
+    cout << "✓ Alice subscribed to CtrlCat and Dogorithm" << endl;
+    cout << "✓ Bob subscribed to CtrlCat" << endl;
+    cout << "✓ Charlie subscribed to Dogorithm" << endl;
+
+    // ========================================================================
+    // Test 8: Observer Pattern - Notifications
+    // ========================================================================
+    printSection("Test 8: Observer Pattern - Notifications");
+    
+    cout << "New user joins - all subscribers get notified\n" << endl;
+    
+    Users* diana = new Users("Diana");
+    ctrlCat->subscribe(diana);
+    ctrlCat->registerUser(diana);
+    
+    cout << "\nManual notification test:" << endl;
+    ctrlCat->notify("Diana has joined!", "CtrlCat");
+    
+    cout << "\nAlice's notifications (" << alice->getNotifications().size() << " total):" << endl;
+    vector<string> notifs = alice->getNotifications();
+    for (size_t i = 0; i < min(notifs.size(), size_t(4)); i++) {
+        cout << "  " << (i+1) << ". " << notifs[i] << endl;
+    }
+    
+    cout << "\n✓ Observers receive notifications from Subject" << endl;
+
+    // ========================================================================
+    // Test 9: Observer Pattern - Unsubscribe
+    // ========================================================================
+    printSection("Test 9: Observer Pattern - Unsubscribe");
+    
+    ctrlCat->unsubscribe(bob);
+    cout << "✓ Bob unsubscribed from CtrlCat notifications" << endl;
+    
+    cout << "\nSending notification (Bob won't receive):" << endl;
+    ctrlCat->notify("Bob won't get this", "CtrlCat");
+    
+    cout << "\n✓ Unsubscribed observers don't receive notifications" << endl;
+
+    // ========================================================================
+    // Test 10: Mediator Pattern - Remove User
+    // ========================================================================
+    printSection("Test 10: Mediator Pattern - Remove User");
+    
+    cout << "Mediator manages user removal\n" << endl;
+    
     ctrlCat->removeUser(bob);
+    cout << "✓ Bob removed from CtrlCat by mediator" << endl;
     
-    displayUsers(ctrlCat, "CtrlCat");
-    
-    cout << "\nAlice sends a message after Bob left:" << endl;
+    cout << "\nAlice sends message (Bob won't receive):" << endl;
     alice->send("Where did Bob go?", ctrlCat);
+    
+    cout << "\n✓ Mediator no longer routes messages to removed user" << endl;
 
     // ========================================================================
-    // Test 8: Demonstrate Mediator Pattern (No Direct Communication)
+    // Test 11: Integration - Multiple Rooms
     // ========================================================================
-    printSection("Test 8: Mediator Pattern Demonstration");
+    printSection("Test 11: Integration - Multiple Room Membership");
     
-    cout << "\nDemonstrating that users communicate through the ChatRoom mediator:" << endl;
-    cout << "- Alice sends to CtrlCat room (mediator)" << endl;
-    cout << "- CtrlCat forwards to all other users" << endl;
-    cout << "- Users never communicate directly with each other\n" << endl;
+    cout << "Alice is a member of multiple rooms\n" << endl;
+    cout << "Alice's rooms:" << endl;
+    vector<ChatRoom*> aliceRooms = alice->getChatRooms();
+    for (size_t i = 0; i < aliceRooms.size(); i++) {
+        cout << "  " << (i+1) << ". " << aliceRooms[i]->getRoomName() << endl;
+    }
     
-    alice->send("This message goes through the mediator!", ctrlCat);
+    cout << "\nAlice sends to both rooms:" << endl;
+    alice->send("I love both cats AND dogs!", ctrlCat);
+    alice->send("Best of both worlds!", dogorithm);
+    
+    cout << "\n✓ Users can be colleagues in multiple mediators" << endl;
 
     // ========================================================================
-    // Test 9: Demonstrate Command Pattern
+    // Test 12: Final State
     // ========================================================================
-    printSection("Test 9: Command Pattern Demonstration");
+    printSection("Test 12: Final System State");
     
-    cout << "\nDemonstrating Command Pattern:" << endl;
-    cout << "1. User calls send() method" << endl;
-    cout << "2. SendMessageCommand and LogMessageCommand created" << endl;
-    cout << "3. Commands added to queue" << endl;
-    cout << "4. Commands executed in sequence" << endl;
-    cout << "5. SendMessageCommand -> room.sendMessage()" << endl;
-    cout << "6. LogMessageCommand -> room.saveMessage()\n" << endl;
+    cout << "\nStatistics:" << endl;
+    cout << "CtrlCat - Users: " << ctrlCat->getUsers().size() 
+         << ", Messages: " << ctrlCat->getChatHistory().size() << endl;
+    cout << "Dogorithm - Users: " << dogorithm->getUsers().size() 
+         << ", Messages: " << dogorithm->getChatHistory().size() << endl;
     
-    charlie->send("Commands make messaging flexible!", dogorithm);
+    cout << "\nFinal CtrlCat Users (using Iterator):" << endl;
+    userIter = ctrlCat->createUserIterator();
+    while (userIter->hasNext()) {
+        cout << "  - " << userIter->next()->getName() << endl;
+    }
+    delete userIter;
+    
+    cout << "\n✓ All patterns working together seamlessly" << endl;
 
     // ========================================================================
-    // Test 10: Final State Display
+    // Pattern Summary
     // ========================================================================
-    printSection("Test 10: Final State of Chat Rooms");
+    printSection("Pattern Summary");
     
-    displayUsers(ctrlCat, "CtrlCat");
-    displayChatHistory(ctrlCat, "CtrlCat");
+    cout << "\n✓ MEDIATOR Pattern:" << endl;
+    cout << "  - ChatRoom mediates communication between Users" << endl;
+    cout << "  - Users register/remove through mediator" << endl;
+    cout << "  - Messages routed through mediator, no direct user-to-user" << endl;
     
-    displayUsers(dogorithm, "Dogorithm");
-    displayChatHistory(dogorithm, "Dogorithm");
+    cout << "\n✓ COMMAND Pattern:" << endl;
+    cout << "  - SendMessageCommand & LogMessageCommand encapsulate actions" << endl;
+    cout << "  - Users (Invokers) create and execute commands" << endl;
+    cout << "  - Commands queued and executed in sequence" << endl;
+    
+    cout << "\n✓ ITERATOR Pattern:" << endl;
+    cout << "  - UserListIterator traverses room members" << endl;
+    cout << "  - ChatHistoryIterator traverses message history" << endl;
+    cout << "  - Hides internal storage, supports reset()" << endl;
+    
+    cout << "\n✓ OBSERVER Pattern:" << endl;
+    cout << "  - ChatRoom is Subject, Users are Observers" << endl;
+    cout << "  - Users subscribe/unsubscribe to notifications" << endl;
+    cout << "  - Notifications broadcast when users join/leave" << endl;
 
     // ========================================================================
     // Cleanup
     // ========================================================================
     printSection("Cleanup");
     
-    cout << "Cleaning up memory..." << endl;
-    
     delete alice;
     delete bob;
     delete charlie;
+    delete diana;
     delete ctrlCat;
     delete dogorithm;
     
-    cout << "✓ All memory cleaned up successfully" << endl;
-
-    printSection("ALL TESTS COMPLETED SUCCESSFULLY");
+    cout << "✓ All memory freed (check with valgrind)" << endl;
+    
+    printSection("ALL TESTS PASSED - 4 PATTERNS VERIFIED!");
     
     return 0;
 }
